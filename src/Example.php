@@ -8,8 +8,6 @@ class Example
 {
     /**
      * Defining the isFictive method
-     *
-     * @return bool
      */
     public function isFictive(): bool
     {
