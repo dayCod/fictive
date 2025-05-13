@@ -1,12 +1,12 @@
 {
-    "name": "nunomaduro/skeleton-php",
+    "name": "daycode/fictive",
     "description": "A skeleton repository for my packages",
-    "keywords": ["php", "skeleton", "package"],
+    "keywords": ["php", "laravel", "package"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Nuno Maduro",
-            "email": "enunomaduro@gmail.com"
+            "name": "dayCod",
+            "email": "alayarahman07@gmail.com"
         }
     ],
     "require": {
@@ -23,12 +23,19 @@
     },
     "autoload": {
         "psr-4": {
-            "NunoMaduro\\SkeletonPhp\\": "src/"
+            "Daycode\\Fictive\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Daycode\\Fictive\\FictiveServiceProvider"
+            ]
         }
     },
     "minimum-stability": "stable",

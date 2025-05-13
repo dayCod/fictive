@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\SkeletonPhp;
+namespace Daycode\Fictive;
 
-/**
- * @internal
- */
-final class Example
+class Example
 {
-    public function foo(): string
+    /**
+     * Defining the isFictive method
+     *
+     * @return bool
+     */
+    public function isFictive(): bool
     {
-        return 'bar';
+        return true;
     }
 }
