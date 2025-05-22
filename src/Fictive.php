@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Daycode\Fictive;
 
 use Daycode\Fictive\Exceptions\MethodNotAvailableException;
-use Daycode\Fictive\Services\HandleLocation;
 use Daycode\Fictive\Services\HandlePerson;
 use ReflectionClass;
 use ReflectionMethod;
@@ -16,8 +15,12 @@ class Fictive
      * Map of method handlers.
      */
     protected array $handlers = [
+
+        /**
+         * Methods for HandlePerson
+         */
         'fullName' => HandlePerson::class,
-        'latitude' => HandleLocation::class,
+
     ];
 
     /**
@@ -94,7 +97,6 @@ class Fictive
     {
         return [
             \Daycode\Fictive\Contracts\Person::class,
-            \Daycode\Fictive\Contracts\Location::class,
         ];
     }
 }

@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Daycode\Fictive\Services;
 
 use Daycode\Fictive\Contracts\Person;
+use Daycode\Fictive\Exceptions\MismatchPromptInput;
+use Daycode\Fictive\Exceptions\RateLimitExceeded;
 use Daycode\Fictive\FictiveProcessor;
+use Daycode\Fictive\LLM\Context\PersonCtx;
+use Daycode\Fictive\LLM\OpenRouter;
+use Illuminate\Support\Facades\Cache;
 
 class HandlePerson extends FictiveProcessor implements Person
 {
@@ -14,10 +19,18 @@ class HandlePerson extends FictiveProcessor implements Person
      */
     public function validate(string $method, array $arguments): bool
     {
-        // Validate the method name
-        // Add any specific validation logic for the fullName method
-        // For now, we'll just return true
-        return $method === 'fullName';
+        $method = strtolower($method);
+
+        $response = (new OpenRouter)
+            ->setSystemPrompt(PersonCtx::validationContext($method, $arguments[0]))
+            ->setUserPrompt($arguments[0])
+            ->execute();
+
+        if (isset($response?->error) && $response?->error->code == 429) {
+            throw new RateLimitExceeded;
+        }
+
+        return boolval($response->choices[0]->message->content);
     }
 
     /**
@@ -27,15 +40,28 @@ class HandlePerson extends FictiveProcessor implements Person
     {
         $prompt = $arguments[0] ?? null;
 
-        // Here you would implement AI integration logic to generate names
-        // This is a placeholder that returns a dummy full name
-        if (! empty($prompt)) {
-            // Use the prompt to influence the name generation
-            // This is where you would add your AI logic
-            return 'Generated Name Based On: '.$prompt;
+        $cache = Cache::remember(
+            key: 'fictive-context',
+            ttl: now()->addHour(),
+            callback: fn (): array => []
+        );
+
+        $existingResponses = json_encode($cache[$method] ?? []);
+
+        $response = (new OpenRouter)
+            ->setSystemPrompt(PersonCtx::processContext($method, $prompt, $existingResponses))
+            ->setUserPrompt($arguments[0])
+            ->execute();
+
+        if (isset($response?->error) && $response?->error->code == 429) {
+            throw new RateLimitExceeded;
         }
 
-        return 'John Doe'; // Default fallback
+        $newResponse = $response->choices[0]->message->content ?? 'N/A';
+        $cache[$method][] = $newResponse;
+        Cache::put('fictive-context', $cache);
+
+        return $newResponse;
     }
 
     /**
@@ -47,6 +73,6 @@ class HandlePerson extends FictiveProcessor implements Person
             return $this->process('fullName', [$prompt]);
         }
 
-        return 'Invalid';
+        throw new MismatchPromptInput($prompt, 'fullName');
     }
 }
