@@ -14,8 +14,45 @@ composer install && composer test
 2. Parse schema
 3. Call the method based on your needs
 4. Validate and Normalize the Result of the Method.
-5. Returning string as a result.
+5. Caching the result for future use and avoid duplicated data
+6. Returning string as a result.
 
+```
+
+## How to Install
+
+1. Install fresh laravel ">10" project as usual
+2. Create packages/daycode directory
+3. Jump inside packages/daycode directory and clone this repository
+4. Run composer install
+5. Run composer test
+6. Open the root composer.json file
+7. And add the following line:
+
+```php
+"autoload": {
+    "psr-4": {
+        "App\\": "app/",
+        "Database\\Factories\\": "database/factories/",
+        "Database\\Seeders\\": "database/seeders/",
+        "Daycode\\Fictive\\": "packages/daycode/fictive/src/"
+    }
+},
+```
+
+8. Move to your providers file and add the following line:
+
+```php
+return [
+    App\Providers\AppServiceProvider::class,
+    Daycode\Fictive\FictiveServiceProvider::class,
+];
+```
+
+9. Final step run this following command inside the base of your project:
+
+```
+composer dump:autoload
 ```
 
 ## Notes
