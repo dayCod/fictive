@@ -11,6 +11,8 @@ class FictiveServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register(): void
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/fictive.php', 'fictive');
+
         $this->app->singleton(Fictive::class, fn ($app): \Daycode\Fictive\Fictive => new Fictive);
     }
 
@@ -19,6 +21,8 @@ class FictiveServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->publishes([
+            __DIR__.'/../config/fictive.php' => config_path('fictive.php'),
+        ], 'fictive-config');
     }
 }
