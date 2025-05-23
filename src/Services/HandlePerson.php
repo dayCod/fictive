@@ -88,4 +88,16 @@ class HandlePerson extends FictiveProcessor implements Person
 
         throw new MismatchPromptInput($prompt, 'phoneNumber');
     }
+
+    /**
+     * Generate a religion based on optional prompt.
+     */
+    public function religion(?string $prompt = null): string
+    {
+        if ($this->validate('religion', [$prompt])) {
+            return $this->process('religion', [$prompt]);
+        }
+
+        throw new MismatchPromptInput($prompt, 'religion');
+    }
 }

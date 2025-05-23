@@ -21,6 +21,7 @@ class Fictive
          */
         'fullName' => HandlePerson::class,
         'phoneNumber' => HandlePerson::class,
+        'religion' => HandlePerson::class,
 
     ];
 

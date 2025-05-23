@@ -19,7 +19,7 @@ interface Person
     // /**
     //  * defining the religion method
     //  */
-    // public function religion(?string $prompt = null): string;
+    public function religion(?string $prompt = null): string;
 
     // /**
     //  * defining the hobby method
