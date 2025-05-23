@@ -21,10 +21,10 @@ interface Person
     //  */
     public function religion(?string $prompt = null): string;
 
-    // /**
-    //  * defining the hobby method
-    //  */
-    // public function hobby(?string $prompt = null): string;
+    /**
+     * defining the hobby method
+     */
+    public function hobby(?string $prompt = null): string;
 
     // /**
     //  * defining the bloodGroup method

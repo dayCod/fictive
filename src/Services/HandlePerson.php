@@ -100,4 +100,16 @@ class HandlePerson extends FictiveProcessor implements Person
 
         throw new MismatchPromptInput($prompt, 'religion');
     }
+
+    /**
+     * Generate a hobby based on optional prompt.
+     */
+    public function hobby(?string $prompt = null): string
+    {
+        if ($this->validate('hobby', [$prompt])) {
+            return $this->process('hobby', [$prompt]);
+        }
+
+        throw new MismatchPromptInput($prompt, 'hobby');
+    }
 }
