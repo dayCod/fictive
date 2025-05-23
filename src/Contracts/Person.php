@@ -16,9 +16,9 @@ interface Person
      */
     public function phoneNumber(?string $prompt = null): string;
 
-    // /**
-    //  * defining the religion method
-    //  */
+    /**
+     * defining the religion method
+     */
     public function religion(?string $prompt = null): string;
 
     /**
@@ -26,8 +26,8 @@ interface Person
      */
     public function hobby(?string $prompt = null): string;
 
-    // /**
-    //  * defining the bloodGroup method
-    //  */
-    // public function bloodGroup(?string $prompt = null): string;
+    /**
+     * defining the bloodGroup method
+     */
+    public function bloodGroup(?string $prompt = null): string;
 }

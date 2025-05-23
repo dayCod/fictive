@@ -23,6 +23,7 @@ class Fictive
         'phoneNumber' => HandlePerson::class,
         'religion' => HandlePerson::class,
         'hobby' => HandlePerson::class,
+        'bloodGroup' => HandlePerson::class,
 
     ];
 

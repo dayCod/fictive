@@ -112,4 +112,16 @@ class HandlePerson extends FictiveProcessor implements Person
 
         throw new MismatchPromptInput($prompt, 'hobby');
     }
+
+    /**
+     * Generate a blood group based on optional prompt.
+     */
+    public function bloodGroup(?string $prompt = null): string
+    {
+        if ($this->validate('bloodGroup', [$prompt])) {
+            return $this->process('bloodGroup', [$prompt]);
+        }
+
+        throw new MismatchPromptInput($prompt, 'bloodGroup');
+    }
 }
