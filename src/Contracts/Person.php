@@ -11,20 +11,10 @@ interface Person
      */
     public function fullName(?string $prompt = null): string;
 
-    // /**
-    //  * defining the phoneNumber method
-    //  */
-    // public function phoneNumber(?string $prompt = null): string;
-
-    // /**
-    //  * defining the dateOfBirth method
-    //  */
-    // public function dateOfBirth(?string $prompt = null): string;
-
-    // /**
-    //  * defining the maritalStatus method
-    //  */
-    // public function maritalStatus(?string $prompt = null): string;
+    /**
+     * defining the phoneNumber method
+     */
+    public function phoneNumber(?string $prompt = null): string;
 
     // /**
     //  * defining the religion method

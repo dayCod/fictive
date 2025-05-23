@@ -20,10 +20,11 @@ class HandlePerson extends FictiveProcessor implements Person
     public function validate(string $method, array $arguments): bool
     {
         $method = strtolower($method);
+        $prompt = $arguments[0] ?? null;
 
         $response = (new OpenRouter)
-            ->setSystemPrompt(PersonCtx::validationContext($method, $arguments[0]))
-            ->setUserPrompt($arguments[0])
+            ->setSystemPrompt(PersonCtx::validationContext($method, $prompt))
+            ->setUserPrompt($prompt)
             ->execute();
 
         if (isset($response?->error) && $response?->error->code == 429) {
@@ -74,5 +75,17 @@ class HandlePerson extends FictiveProcessor implements Person
         }
 
         throw new MismatchPromptInput($prompt, 'fullName');
+    }
+
+    /**
+     * Generate a phone number based on optional prompt.
+     */
+    public function phoneNumber(?string $prompt = null): string
+    {
+        if ($this->validate('phoneNumber', [$prompt])) {
+            return $this->process('phoneNumber', [$prompt]);
+        }
+
+        throw new MismatchPromptInput($prompt, 'phoneNumber');
     }
 }

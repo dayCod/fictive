@@ -20,6 +20,7 @@ class Fictive
          * Methods for HandlePerson
          */
         'fullName' => HandlePerson::class,
+        'phoneNumber' => HandlePerson::class,
 
     ];
 

@@ -64,7 +64,7 @@ class OpenRouter
     {
         return Http::withToken($this->apiKey)
             ->withBody(json_encode($this->createBodyStructure()))
-            ->retry(3, 500)
+            ->retry(3, 500, fn ($response) => $response->json()['id'] != 1)
             ->post($this->baseUri.'/chat/completions')
             ->object();
     }
