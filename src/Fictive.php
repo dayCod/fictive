@@ -24,6 +24,7 @@ class Fictive
         'religion' => HandlePerson::class,
         'hobby' => HandlePerson::class,
         'bloodGroup' => HandlePerson::class,
+        'jobDesc' => HandlePerson::class,
 
     ];
 

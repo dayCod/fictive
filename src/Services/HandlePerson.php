@@ -124,4 +124,16 @@ class HandlePerson extends FictiveProcessor implements Person
 
         throw new MismatchPromptInput($prompt, 'bloodGroup');
     }
+
+    /**
+     * Generate a job desk based on optional prompt.
+     */
+    public function jobDesc(?string $prompt = null): string
+    {
+        if ($this->validate('jobDesk', [$prompt])) {
+            return $this->process('jobDesk', [$prompt]);
+        }
+
+        throw new MismatchPromptInput($prompt, 'jobDesk');
+    }
 }
