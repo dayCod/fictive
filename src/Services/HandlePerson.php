@@ -126,6 +126,18 @@ class HandlePerson extends FictiveProcessor implements Person
     }
 
     /**
+     * Generate a job position based on optional prompt.
+     */
+    public function jobPosition(?string $prompt = null): string
+    {
+        if ($this->validate('jobPosition', [$prompt])) {
+            return $this->process('jobPosition', [$prompt]);
+        }
+
+        throw new MismatchPromptInput($prompt, 'jobPosition');
+    }
+
+    /**
      * Generate a job desk based on optional prompt.
      */
     public function jobDesc(?string $prompt = null): string

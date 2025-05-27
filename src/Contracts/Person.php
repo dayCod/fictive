@@ -32,6 +32,11 @@ interface Person
     public function bloodGroup(?string $prompt = null): string;
 
     /**
+     * defining the jobPosition method
+     */
+    public function jobPosition(?string $prompt = null): string;
+
+    /**
      * defining the jobDesk method
      */
     public function jobDesc(?string $prompt = null): string;
