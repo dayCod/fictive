@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Daycode\Fictive;
 
+use Closure;
 use Daycode\Fictive\DataTransferObjects\Person;
 use Daycode\Fictive\Exceptions\RateLimitExceeded;
 use Daycode\Fictive\LLM\Context\PersonContext;
 use Daycode\Fictive\LLM\OpenRouter;
 use Illuminate\Support\Str;
-use Closure;
 
 class Fictive
 {
@@ -18,6 +18,7 @@ class Fictive
     public function count(int $count): self
     {
         $this->count = $count;
+
         return $this;
     }
 
@@ -44,7 +45,7 @@ class Fictive
             $personsData = [];
         }
 
-        return function (callable $callback) use ($personsData) {
+        return function (callable $callback) use ($personsData): void {
             foreach ($personsData as $attributes) {
                 $callback(new Person($attributes));
             }

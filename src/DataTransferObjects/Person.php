@@ -8,9 +8,7 @@ use Illuminate\Support\Str;
 
 class Person
 {
-    public function __construct(protected array $attributes)
-    {
-    }
+    public function __construct(protected array $attributes) {}
 
     public function __call(string $method, array $arguments): mixed
     {
