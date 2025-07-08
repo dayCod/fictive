@@ -4,105 +4,50 @@ declare(strict_types=1);
 
 namespace Daycode\Fictive;
 
-use Daycode\Fictive\Exceptions\MethodNotAvailableException;
-use Daycode\Fictive\Services\HandlePerson;
-use ReflectionClass;
-use ReflectionMethod;
+use Daycode\Fictive\DataTransferObjects\Person;
+use Daycode\Fictive\Exceptions\RateLimitExceeded;
+use Daycode\Fictive\LLM\Context\PersonContext;
+use Daycode\Fictive\LLM\OpenRouter;
+use Illuminate\Support\Str;
+use Closure;
 
 class Fictive
 {
-    /**
-     * Map of method handlers.
-     */
-    protected array $handlers = [
+    protected int $count = 1;
 
-        /**
-         * Methods for HandlePerson
-         */
-        'fullName' => HandlePerson::class,
-        'phoneNumber' => HandlePerson::class,
-        'religion' => HandlePerson::class,
-        'hobby' => HandlePerson::class,
-        'bloodGroup' => HandlePerson::class,
-        'jobPosition' => HandlePerson::class,
-        'jobDesc' => HandlePerson::class,
-
-    ];
-
-    /**
-     * Cache of available methods.
-     */
-    protected array $availableMethods = [];
-
-    /**
-     * Constructor to initialize the available methods.
-     */
-    public function __construct()
+    public function count(int $count): self
     {
-        $this->availableMethods = $this->getAllAvailableMethods();
+        $this->count = $count;
+        return $this;
     }
 
-    /**
-     * Magic method to dynamically handle calls to various methods.
-     */
-    public function __call(string $method, array $arguments)
+    public function handlePersons(): Closure
     {
-        if (! $this->isMethodAvailable($method)) {
-            throw new MethodNotAvailableException($method);
+        $response = (new OpenRouter)
+            ->setSystemPrompt(PersonContext::getContext($this->count))
+            ->setUserPrompt("Generate {$this->count} person data sets.")
+            ->execute();
+
+        if (isset($response?->error) && $response?->error->code == 429) {
+            throw new RateLimitExceeded;
         }
 
-        $handlerClass = $this->getHandlerForMethod($method);
-        if ($handlerClass === null || $handlerClass === '' || $handlerClass === '0') {
-            throw new MethodNotAvailableException($method);
+        $content = $response->choices[0]->message->content;
+
+        if (Str::startsWith($content, '```json')) {
+            $content = Str::between($content, '```json', '```');
         }
 
-        $handler = new $handlerClass;
+        $personsData = json_decode($content, true);
 
-        return $handler->$method(...$arguments);
-    }
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $personsData = [];
+        }
 
-    /**
-     * Get the handler class for a specific method.
-     */
-    protected function getHandlerForMethod(string $method): ?string
-    {
-        return $this->handlers[$method] ?? null;
-    }
-
-    /**
-     * Determine if a method is available.
-     */
-    protected function isMethodAvailable(string $method): bool
-    {
-        return in_array($method, $this->availableMethods);
-    }
-
-    /**
-     * Get all available methods from the contract interfaces.
-     */
-    protected function getAllAvailableMethods(): array
-    {
-        $methods = [];
-
-        $interfaceClasses = $this->getContractInterfaces();
-
-        foreach ($interfaceClasses as $interfaceClass) {
-            $reflection = new ReflectionClass($interfaceClass);
-            foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-                $methods[] = $method->getName();
+        return function (callable $callback) use ($personsData) {
+            foreach ($personsData as $attributes) {
+                $callback(new Person($attributes));
             }
-        }
-
-        return array_unique($methods);
-    }
-
-    /**
-     * Get all contract interface classes.
-     */
-    protected function getContractInterfaces(): array
-    {
-        return [
-            \Daycode\Fictive\Contracts\Person::class,
-        ];
+        };
     }
 }
