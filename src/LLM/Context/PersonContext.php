@@ -6,6 +6,9 @@ namespace Daycode\Fictive\LLM\Context;
 
 class PersonContext
 {
+    /**
+     * Get the context for a person data set.
+     */
     public static function getContext(int $count): string
     {
         return <<<"SYSTEM"

@@ -13,8 +13,14 @@ use Illuminate\Support\Str;
 
 class Fictive
 {
+    /**
+     * set the default number of persons to generate.
+     */
     protected int $count = 1;
 
+    /**
+     * Set the number of persons to generate.
+     */
     public function count(int $count): self
     {
         $this->count = $count;
@@ -22,6 +28,9 @@ class Fictive
         return $this;
     }
 
+    /**
+     * Generate person data sets.
+     */
     public function handlePersons(): Closure
     {
         $response = (new OpenRouter)
