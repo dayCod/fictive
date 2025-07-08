@@ -22,7 +22,6 @@ class Person
     {
         $property = Str::snake($method);
 
-        // If arguments are provided, generate new data with specific criteria
         if ($arguments !== [] && is_string($arguments[0])) {
             return $this->generateSpecificField($property, $arguments[0]);
         }
@@ -49,12 +48,10 @@ class Person
 
             $content = trim($response->choices[0]->message->content);
 
-            // Clean the response from quotes and extra formatting
             $content = trim($content, '"\'');
 
             return $content;
         } catch (\Exception) {
-            // Fallback to existing attribute if API fails
             return $this->attributes[$field] ?? null;
         }
     }

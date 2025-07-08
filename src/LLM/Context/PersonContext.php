@@ -23,7 +23,6 @@ class PersonContext
             'job_description' => 'job description',
         ];
 
-        // Apply dynamic specifications
         foreach (self::$fieldSpecifications as $field => $specification) {
             if (isset($baseFields[$field])) {
                 $baseFields[$field] = $specification;
@@ -90,14 +89,14 @@ class PersonContext
         You are an assistant that generates a single realistic {$fieldType} value.
         Your response must be only the value itself without any additional text, formatting, or explanation.
         Do not include quotes, JSON formatting, or markdown.
-        
+
         Generate a {$fieldType} that matches this specification: {$specification}
-        
+
         Examples:
         - If asked for "indonesian male name", return something like "Budi Santoso"
         - If asked for "brazilian female name", return something like "Maria Silva"
         - If asked for "american phone number", return something like "+1-555-123-4567"
-        
+
         Just return the single value that matches the specification.
         SYSTEM;
     }

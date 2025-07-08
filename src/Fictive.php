@@ -33,7 +33,6 @@ class Fictive
      */
     public function handlePersons(): Closure
     {
-        // Clear any previous field specifications
         PersonContext::clearFieldSpecifications();
 
         $response = (new OpenRouter)
