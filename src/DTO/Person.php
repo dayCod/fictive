@@ -23,37 +23,10 @@ class Person
         $property = Str::snake($method);
 
         if ($arguments !== [] && is_string($arguments[0])) {
-            return $this->generateSpecificField($property, $arguments[0]);
+            PersonContext::setFieldSpecification($property, $arguments[0]);
         }
 
         return $this->attributes[$property] ?? null;
-    }
-
-    /**
-     * Generate specific field with custom specification
-     */
-    protected function generateSpecificField(string $field, string $specification): ?string
-    {
-        $contextPrompt = PersonContext::getSpecificFieldContext($field, $specification);
-
-        try {
-            $response = (new OpenRouter)
-                ->setSystemPrompt($contextPrompt)
-                ->setUserPrompt("Generate one {$field} value.")
-                ->execute();
-
-            if (isset($response?->error)) {
-                return $this->attributes[$field] ?? null;
-            }
-
-            $content = trim($response->choices[0]->message->content);
-
-            $content = trim($content, '"\'');
-
-            return $content;
-        } catch (\Exception) {
-            return $this->attributes[$field] ?? null;
-        }
     }
 
     /**

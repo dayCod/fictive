@@ -9,6 +9,7 @@ use Daycode\Fictive\DTO\Person;
 use Daycode\Fictive\Exceptions\RateLimitExceeded;
 use Daycode\Fictive\LLM\Context\PersonContext;
 use Daycode\Fictive\LLM\OpenRouter;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class Fictive
@@ -33,8 +34,6 @@ class Fictive
      */
     public function handlePersons(): Closure
     {
-        PersonContext::clearFieldSpecifications();
-
         $response = (new OpenRouter)
             ->setSystemPrompt(PersonContext::getContext($this->count))
             ->setUserPrompt("Generate {$this->count} person data sets.")
