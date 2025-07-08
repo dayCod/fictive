@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Daycode\Fictive;
 
 use Closure;
-use Daycode\Fictive\DataTransferObjects\Person;
+use Daycode\Fictive\DTO\Person;
 use Daycode\Fictive\Exceptions\RateLimitExceeded;
 use Daycode\Fictive\LLM\Context\PersonContext;
 use Daycode\Fictive\LLM\OpenRouter;

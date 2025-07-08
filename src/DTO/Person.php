@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Daycode\Fictive\DataTransferObjects;
+namespace Daycode\Fictive\DTO;
 
 use Illuminate\Support\Str;
 
