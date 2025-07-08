@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Daycode\Fictive\DTO;
 
+use Daycode\Fictive\LLM\Context\PersonContext;
+use Daycode\Fictive\LLM\OpenRouter;
 use Illuminate\Support\Str;
 
 class Person
@@ -20,7 +22,41 @@ class Person
     {
         $property = Str::snake($method);
 
+        // If arguments are provided, generate new data with specific criteria
+        if ($arguments !== [] && is_string($arguments[0])) {
+            return $this->generateSpecificField($property, $arguments[0]);
+        }
+
         return $this->attributes[$property] ?? null;
+    }
+
+    /**
+     * Generate specific field with custom specification
+     */
+    protected function generateSpecificField(string $field, string $specification): ?string
+    {
+        $contextPrompt = PersonContext::getSpecificFieldContext($field, $specification);
+
+        try {
+            $response = (new OpenRouter)
+                ->setSystemPrompt($contextPrompt)
+                ->setUserPrompt("Generate one {$field} value.")
+                ->execute();
+
+            if (isset($response?->error)) {
+                return $this->attributes[$field] ?? null;
+            }
+
+            $content = trim($response->choices[0]->message->content);
+
+            // Clean the response from quotes and extra formatting
+            $content = trim($content, '"\'');
+
+            return $content;
+        } catch (\Exception) {
+            // Fallback to existing attribute if API fails
+            return $this->attributes[$field] ?? null;
+        }
     }
 
     /**

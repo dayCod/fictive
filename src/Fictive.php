@@ -33,6 +33,9 @@ class Fictive
      */
     public function handlePersons(): Closure
     {
+        // Clear any previous field specifications
+        PersonContext::clearFieldSpecifications();
+
         $response = (new OpenRouter)
             ->setSystemPrompt(PersonContext::getContext($this->count))
             ->setUserPrompt("Generate {$this->count} person data sets.")
