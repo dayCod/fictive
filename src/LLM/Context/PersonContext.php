@@ -14,6 +14,15 @@ class PersonContext
         '"hobby"',
         '"blood_group"',
         '"job_title"',
+        '"gender"',
+        '"birth_date"',
+        '"address"',
+        '"national_id_number"',
+        '"marital_status"',
+        '"education"',
+        '"company"',
+        '"salary"',
+        '"email"',
     ];
 
     /**
