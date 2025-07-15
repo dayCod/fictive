@@ -28,7 +28,7 @@ class PersonContext
             foreach ($customFields as $field => $description) {
                 $fieldsToUse[] = is_numeric($field) ? "\"{$description}\"" : "\"{$field}: {$description}\"";
             }
-            $availableFields = implode(', ', $fieldsToUse);
+            $availableFields = implode(', ', ($fieldsToUse + $instance->availableFields));
         } else {
             $availableFields = implode(', ', $instance->availableFields);
         }

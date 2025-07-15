@@ -93,11 +93,7 @@ class Fictive
      */
     public function handlePersons(): Closure
     {
-        $personService = $this->getService('person');
-
-        return function (callable $callback) use ($personService): void {
-            $personService->each($callback);
-        };
+        return $this->handle('person');
     }
 
     /**

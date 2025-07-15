@@ -56,28 +56,4 @@ class PersonService extends BaseService
     {
         return $this->random();
     }
-
-    /**
-     * Filter persons by specific criteria
-     */
-    public function filterByReligion(string $religion): array
-    {
-        return $this->filter(fn (Person $person): bool => $person->religion() === $religion);
-    }
-
-    /**
-     * Filter persons by blood group
-     */
-    public function filterByBloodGroup(string $bloodGroup): array
-    {
-        return $this->filter(fn (Person $person): bool => $person->bloodGroup() === $bloodGroup);
-    }
-
-    /**
-     * Get persons with specific job title
-     */
-    public function filterByJobTitle(string $jobTitle): array
-    {
-        return $this->filter(fn (Person $person): bool => stripos($person->jobTitle(), $jobTitle) !== false);
-    }
 }
