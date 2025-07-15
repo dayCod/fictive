@@ -89,14 +89,6 @@ class Fictive
     }
 
     /**
-     * Generate person data sets (backward compatibility)
-     */
-    public function handlePersons(): Closure
-    {
-        return $this->handle('person');
-    }
-
-    /**
      * Generic handle method for any registered service
      */
     public function handle(string $type): Closure
@@ -106,6 +98,14 @@ class Fictive
         return function (callable $callback) use ($service): void {
             $service->each($callback);
         };
+    }
+
+    /**
+     * Generate person data sets (backward compatibility)
+     */
+    public function handlePersons(): Closure
+    {
+        return $this->handle('person');
     }
 
     /**
