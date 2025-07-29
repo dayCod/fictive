@@ -62,11 +62,15 @@ class OpenRouter
      */
     public function execute(): object
     {
-        return Http::withToken($this->apiKey)
-            ->withBody(json_encode($this->createBodyStructure()))
-            ->retry(3, 500, fn ($response): bool => $response->json()['id'] != 1)
-            ->post($this->baseUri.'/chat/completions')
-            ->object();
+        try {
+            return Http::withToken($this->apiKey)
+                ->withBody(json_encode($this->createBodyStructure()))
+                ->retry(3, 500, fn ($response): bool => $response->json()['id'] != 1)
+                ->post($this->baseUri.'/chat/completions')
+                ->object();
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to execute OpenRouter API: '.$e->getMessage(), 0, $e);
+        }
     }
 
     /**

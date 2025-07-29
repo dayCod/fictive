@@ -33,11 +33,27 @@ class PersonContext
         $instance = new self;
 
         if ($customFields !== []) {
+            $customFieldNames = [];
             $fieldsToUse = [];
+
             foreach ($customFields as $field => $description) {
-                $fieldsToUse[] = is_numeric($field) ? "\"{$description}\"" : "\"{$field}: {$description}\"";
+                if (is_numeric($field)) {
+                    $fieldsToUse[] = "\"{$description}\"";
+                    $customFieldNames[$description] = true;
+                } else {
+                    $fieldsToUse[] = "\"{$field}: {$description}\"";
+                    $customFieldNames[$field] = true;
+                }
             }
-            $availableFields = implode(', ', ($fieldsToUse + $instance->availableFields));
+
+            foreach ($instance->availableFields as $defaultField) {
+                $fieldName = trim((string) $defaultField, '"');
+                if (! isset($customFieldNames[$fieldName])) {
+                    $fieldsToUse[] = $defaultField;
+                }
+            }
+
+            $availableFields = implode(', ', $fieldsToUse);
         } else {
             $availableFields = implode(', ', $instance->availableFields);
         }

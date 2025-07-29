@@ -231,31 +231,35 @@ abstract class BaseService
      */
     protected function callOpenRouterAPI(): array
     {
-        $contextClass = $this->getContextClass();
-        $entityName = $this->getEntityName();
+        try {
+            $contextClass = $this->getContextClass();
+            $entityName = $this->getEntityName();
 
-        $response = (new OpenRouter)
-            ->setSystemPrompt($contextClass::getContext($this->count, $this->customFields))
-            ->setUserPrompt("Generate {$this->count} {$entityName} data sets.")
-            ->execute();
+            $response = (new OpenRouter)
+                ->setSystemPrompt($contextClass::getContext($this->count, $this->customFields))
+                ->setUserPrompt("Generate {$this->count} {$entityName} data sets.")
+                ->execute();
 
-        if (isset($response?->error) && $response?->error->code == 429) {
-            throw new RateLimitExceeded;
+            if (isset($response?->error) && $response?->error->code == 429) {
+                throw new RateLimitExceeded;
+            }
+
+            $content = $response->choices[0]->message->content;
+
+            if (Str::startsWith($content, '```json')) {
+                $content = Str::between($content, '```json', '```');
+            }
+
+            $data = json_decode($content, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return [];
+            }
+
+            return $data;
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to call OpenRouter API: '.$e->getMessage(), 0, $e);
         }
-
-        $content = $response->choices[0]->message->content;
-
-        if (Str::startsWith($content, '```json')) {
-            $content = Str::between($content, '```json', '```');
-        }
-
-        $data = json_decode($content, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return [];
-        }
-
-        return $data;
     }
 
     /**
