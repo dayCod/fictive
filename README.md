@@ -1,73 +1,86 @@
 # Fictive
 
-Have you ever wanted to test a running system to see if it can handle millions of records, but found that the large amount of data often confuses QA testers because it doesn’t look realistic? That’s exactly why Fictive is here — a solution to generate dummy data that actually feels real.
+Fictive is a Laravel package designed to generate realistic dummy data for testing large-scale systems. Unlike traditional data generators, Fictive creates data that feels real, helping QA testers avoid confusion and enabling more effective testing scenarios.
 
-After you clone this repo, run the following command:
-```
-composer install && composer test
-```
+## Features
 
-## How it Works
+- Generate millions of realistic records for testing
+- Schema-based data generation
+- Data validation and normalization
+- Caching to avoid duplicate data
+- Simple integration with Laravel
 
-```
-1. Setup and Initialize Fictive Functions
-2. Parse schema
-3. Call the method based on your needs
-4. Validate and Normalize the Result of the Method.
-5. Caching the result for future use and avoid duplicated data
-6. Returning string as a result.
+## How It Works
 
-```
+1. Setup and initialize Fictive functions
+2. Parse your schema
+3. Call the desired method to generate data
+4. Validate and normalize the result
+5. Cache the result for future use
+6. Return the generated data as a string
 
-## How to Install
+## Installation
 
-1. Install fresh laravel ">10" project as usual
-2. Create packages/daycode directory
-3. Jump inside packages/daycode directory and clone this repository
-4. Run composer install
-5. Run composer test
-6. Open the root composer.json file
-7. And add the following line:
+## Usage Example
+
+You can use Fictive in your services, factories, or seeders. Example:
 
 ```php
-"autoload": {
-    "psr-4": {
-        "App\\": "app/",
-        "Database\\Factories\\": "database/factories/",
-        "Database\\Seeders\\": "database/seeders/",
-        "Daycode\\Fictive\\": "packages/daycode/fictive/src/"
-    }
-},
+use Daycode\Fictive\Fictive;
+
+$handlePersons = app(Fictive::class)
+    ->count(3)
+    ->withFields([
+        'full_name' => 'indonesian male name',
+        'hobby' => 'indoor hobbies',
+        'email' => 'using domain @gmail.com',
+    ])
+    ->handlePersons();
+
+$handlePersons(function ($person) {
+    User::create([
+        'name' => $person->fullName(),
+        'email' => $person->email(),
+        'email_verified_at' => now(),
+        'password' => bcrypt('password'),
+        'phone_number' => $person->phoneNumber(),
+        'religion' => $person->religion(),
+        'hobby' => $person->hobby(),
+        'blood_group' => $person->bloodGroup(),
+        'job_description' => $person->jobTitle(),
+    ]);
+});
 ```
 
-8. Move to your providers file and add the following line:
+Refer to the documentation in the `docs/` folder for more advanced usage and schema definitions.
 
-```php
-return [
-    App\Providers\AppServiceProvider::class,
-    Daycode\Fictive\FictiveServiceProvider::class,
-];
-```
+## Project Structure
 
-9. Final step run this following command inside the base of your project:
+- `src/` — Main package source code
+  - `DTO/` — Data Transfer Objects
+  - `Exceptions/` — Custom exceptions
+  - `LLM/` — Language Model Modules
+  - `Services/` — Service classes
+- `config/` — Package configuration
+- `tests/` — Unit and feature tests
+- `docs/` — Documentation and examples
 
-```
-composer dump:autoload
-```
+## Development & Contribution
 
-## Notes
+Before pushing to the main branch, please run:
 
-Before pushing to the main branch, make sure to run these commands:
-
-```
+```sh
 ./vendor/bin/rector
-
 ./vendor/bin/pint
-
 composer test
 ```
 
-## Gotchas
-```
-Keep it simple stupid and don't overthink it.
-```
+Feel free to open issues or pull requests. See `CONTRIBUTING.md` for more details.
+
+## License
+
+This package is open-sourced software licensed under the MIT license.
+
+## Tips
+
+> Keep it simple, and don't overthink it.
