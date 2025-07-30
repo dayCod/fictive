@@ -1,7 +1,7 @@
 ## Available Fields
 
-| Field | Type | Description |
-| --- | --- | --- |
+| Field | Type | Description | Method |
+| --- | --- | --- | --- |
 | full_name | string | The name of the person | fullName() |
 | phone_number | string | The phone number of the person | phoneNumber() |
 | religion | string | The religion of the person | religion() |
