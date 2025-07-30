@@ -66,7 +66,7 @@ Refer to the documentation in the `docs/` folder for more advanced usage and sch
 - `docs/` — Documentation and examples
 
 ## Available Data Classes
-- Person Class
+- [Person Class](https://github.com/dayCod/fictive/blob/master/docs/class/Person.md)
 
 ## Development & Contribution
 
