@@ -26,6 +26,7 @@ class Fictive
      */
     protected array $services = [
         'person' => PersonService::class,
+        // Add other services here as needed...
     ];
 
     /**

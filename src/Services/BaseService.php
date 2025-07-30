@@ -107,21 +107,6 @@ abstract class BaseService
     }
 
     /**
-     * Get first item
-     */
-    public function first(): mixed
-    {
-        $data = $this->generateData();
-        $dtoClass = $this->getDTOClass();
-
-        if ($data === []) {
-            return null;
-        }
-
-        return new $dtoClass($data[0]);
-    }
-
-    /**
      * Get item by index
      */
     public function get(int $index): mixed
@@ -134,68 +119,6 @@ abstract class BaseService
         }
 
         return new $dtoClass($data[$index]);
-    }
-
-    /**
-     * Get total count of generated items
-     */
-    public function count(): int
-    {
-        return count($this->generateData());
-    }
-
-    /**
-     * Check if data is empty
-     */
-    public function isEmpty(): bool
-    {
-        return $this->generateData() === [];
-    }
-
-    /**
-     * Get all generated data as array (useful for debugging)
-     */
-    public function toArray(): array
-    {
-        return $this->generateData();
-    }
-
-    /**
-     * Reset cache (force new API call)
-     */
-    public function refresh(): self
-    {
-        $this->data = null;
-
-        return $this;
-    }
-
-    /**
-     * Check if data is cached
-     */
-    public function isCached(): bool
-    {
-        return $this->data !== null;
-    }
-
-    /**
-     * Filter items by callback
-     */
-    public function filter(callable $callback): array
-    {
-        $items = $this->getItems();
-
-        return array_filter($items, $callback);
-    }
-
-    /**
-     * Map items with callback
-     */
-    public function map(callable $callback): array
-    {
-        $items = $this->getItems();
-
-        return array_map($callback, $items);
     }
 
     /**
@@ -213,17 +136,6 @@ abstract class BaseService
         $randomIndex = array_rand($data);
 
         return new $dtoClass($data[$randomIndex]);
-    }
-
-    /**
-     * Get items with pagination
-     */
-    public function paginate(int $perPage, int $page = 1): array
-    {
-        $data = $this->generateData();
-        $offset = ($page - 1) * $perPage;
-
-        return array_slice($data, $offset, $perPage);
     }
 
     /**
@@ -260,24 +172,5 @@ abstract class BaseService
         } catch (\Exception $e) {
             throw new \RuntimeException('Failed to call OpenRouter API: '.$e->getMessage(), 0, $e);
         }
-    }
-
-    /**
-     * Create a new instance with different count
-     */
-    public function newInstance(int $count, array $customFields = []): self
-    {
-        return new static($count, $customFields);
-    }
-
-    /**
-     * Clone current instance
-     */
-    public function clone(): self
-    {
-        $cloned = new static($this->count, $this->customFields);
-        $cloned->data = $this->data;
-
-        return $cloned;
     }
 }
