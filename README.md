@@ -65,6 +65,9 @@ Refer to the documentation in the `docs/` folder for more advanced usage and sch
 - `tests/` — Unit and feature tests
 - `docs/` — Documentation and examples
 
+## Available Data Classes
+- Person Class
+
 ## Development & Contribution
 
 Before pushing to the main branch, please run:
