@@ -30,7 +30,7 @@ use Daycode\Fictive\Fictive;
 
 $handlePersons = app(Fictive::class)
     ->count(1)
-    ->handlePersons();
+    ->handlePersons(); // Person Service Example
 
 $handlePersons(function ($person) {
     User::create([
