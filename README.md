@@ -29,12 +29,7 @@ You can use Fictive in your services, factories, or seeders. Example:
 use Daycode\Fictive\Fictive;
 
 $handlePersons = app(Fictive::class)
-    ->count(3)
-    ->withFields([
-        'full_name' => 'indonesian male name',
-        'hobby' => 'indoor hobbies',
-        'email' => 'using domain @gmail.com',
-    ])
+    ->count(1)
     ->handlePersons();
 
 $handlePersons(function ($person) {
